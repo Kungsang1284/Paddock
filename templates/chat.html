@@ -1,28 +1,22 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>WebSocket Chat</title>
+    <meta charset="UTF-8" />
+    <title>コメント一覧</title>
 </head>
 <body>
-    <h1>WebSocket チャット</h1>
-    <input type="text" id="messageInput" placeholder="メッセージを入力" />
-    <button onclick="sendMessage()">送信</button>
-    <ul id="messages"></ul>
+    <h1>コメント一覧</h1>
 
-    <script>
-    const ws = new WebSocket("ws://localhost:8000/ws");
+    <form action="/comment" method="post">
+        <input type="text" name="message" placeholder="コメントを入力" required />
+        <button type="submit">送信</button>
+    </form>
 
-    ws.onmessage = (event) => {
-      const li = document.createElement("li");
-      li.textContent = event.data;
-      document.getElementById("messages").appendChild(li);
-    };
-
-    function sendMessage() {
-      const input = document.getElementById("messageInput");
-      ws.send(input.value);
-      input.value = "";
-    }
-    </script>
+    <ul>
+        {% for msg, created_at in comments %}
+        <li>{{ created_at }} - {{ msg }}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
+
